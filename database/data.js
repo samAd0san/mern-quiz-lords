@@ -6,6 +6,7 @@ export default [
             'Object-Oriented',
             'Object-Based',
             'Procedural',
+            'Functional',
         ]
     },
     {
@@ -15,6 +16,7 @@ export default [
             'document.write()',
             'console.log()',
             'window.alert()',
+            'none of above',
         ]
     },
     {
@@ -24,6 +26,7 @@ export default [
             'Boolean',
             'Undefined',
             'Object',
+            'falsy',
         ]
     },
     {
@@ -32,7 +35,8 @@ export default [
         options : [
             'Return Object',
             'Return String',
-            'Return Integer'
+            'Return Integer',
+            'Return Boolean',
         ]
     },
     {
@@ -42,8 +46,9 @@ export default [
             'stringify()',
             'parse()',
             'convert()',
+            'none of above'
         ]
     }
 ];
 
-export const answers = [0, 1, 2, 1, 0];
+export const answers = [0, 1, 2, 1, 0];
