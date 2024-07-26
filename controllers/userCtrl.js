@@ -55,7 +55,35 @@ const signin = async(req,res) => {
     }
 };
 
+const getUserProfile = async (req, res) => {
+    try {
+        const email = req.params.email;
+        const user = await UserRepo.getUserByEmail(email);
+
+        if (user) {
+            res.status(200).json({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                rollNo: user.rollNo,
+                branch: user.Branch,
+                section: user.Section,
+                email: user.email,
+                role: user.role,
+            });
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (error) {
+        logger.error({
+            location: 'userCtrl - getUserProfile',
+            error: error,
+        });
+        res.status(500).send('Internal Server Error');
+    }
+};
+
 export default {
     signup,
     signin,
+    getUserProfile
 };
