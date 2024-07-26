@@ -1,25 +1,43 @@
 import Questions from "../models/questionSchema.js";
 import Results from "../models/resultSchema.js";
-import questions, { answers } from '../database/data.js'
 
-/** get all questions */
+import { setOneQuestions, answersSetOne } from '../database/setOne.js';
+import { setTwoQuestions, answersSetTwo } from '../database/setTwo.js';
+import { setThreeQuestions, answersSetThree } from '../database/setThree.js';
+
+/** get questions based on roll number */
 export async function getQuestions(req, res){
     try {
-        const q = await Questions.find();
-        res.json(q)
+        const { rollNumber } = req.query; // Get roll number from query parameters
+        const rollInt = parseInt(rollNumber.substring(9)) - 1; // Adjust for 0-indexed
+
+        let set;
+        if (rollInt % 3 === 0) {
+            set = 'setOne';
+        } else if (rollInt % 3 === 1) {
+            set = 'setTwo';
+        } else {
+            set = 'setThree';
+        }
+
+        const questions = await Questions.findOne({ set });
+        res.json(questions);
     } catch (error) {
-        res.json({ error })
+        res.json({ error });
     }
 }
 
-/** insert all questinos */
+/** insert all questions */
 export async function insertQuestions(req, res){
     try {
-        Questions.insertMany({ questions, answers }, function(err, data){
-            res.json({ msg: "Data Saved Successfully...!"})
-        })
+        await Questions.insertMany([
+            { set: 'setOne', questions: setOneQuestions, answers: answersSetOne },
+            { set: 'setTwo', questions: setTwoQuestions, answers: answersSetTwo },
+            { set: 'setThree', questions: setThreeQuestions, answers: answersSetThree }
+        ]);
+        res.json({ msg: "Data Saved Successfully...!"});
     } catch (error) {
-        res.json({ error })
+        res.json({ error });
     }
 }
 
