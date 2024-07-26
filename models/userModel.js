@@ -13,7 +13,7 @@ const schema = new Schema({
         required: [true, 'Last Name is Required']
     },  
     rollNo: {
-        type: Number,
+        type: String,
         required: [true, 'Roll No is Required']
     },
     Branch: {
