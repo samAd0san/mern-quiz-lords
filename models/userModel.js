@@ -11,6 +11,18 @@ const schema = new Schema({
     lastName: {
         type: String,
         required: [true, 'Last Name is Required']
+    },  
+    rollNo: {
+        type: Number,
+        required: [true, 'Roll No is Required']
+    },
+    Branch: {
+        type: String,
+        required: [true, 'Branch is Required']
+    },
+    Section: {
+        type: String,
+        required: [true, 'Section is Required']
     },
     email: {
         type: String,
