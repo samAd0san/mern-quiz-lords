@@ -3,6 +3,8 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { config } from 'dotenv';
 import router from './router/route.js';
+import userRoutes from './router/userRoute.js';
+import tokenAuth from './middlewares/auth.js';
 
 
 /** import connection file */
@@ -34,6 +36,8 @@ app.get('/', (req, res) => {
     }
 })
 
+app.use('/users',userRoutes);
+app.use(tokenAuth);
 
 /** start server only when we have valid connection */
 connect().then(() => {
