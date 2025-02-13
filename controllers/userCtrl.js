@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import UserRepo from '../repositories/userRepo.js';
 import jwt from 'jsonwebtoken';
 import config from '../config/index.js';
+import User from '../models/userModel.js';
 
 const emailExists = (err) => err.message 
     && err.message.indexOf('duplicate key error') > -1;
@@ -82,8 +83,49 @@ const getUserProfile = async (req, res) => {
     }
 };
 
+// Fetch students by Branch (CASE SENSITIVE)
+export const getStudentsByBranch = async (req, res) => {
+    const { branch } = req.params;
+
+    try {
+        // Use case-insensitive regex for branch
+        const students = await User.find({ Branch: { $regex: new RegExp(`^${branch}$`, 'i') } });
+
+        if (!students.length) {
+            return res.status(404).json({ message: `No students found in the branch ${branch}` });
+        }
+
+        res.status(200).json(students);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
+// Fetch students by Branch and Section (CASE SENSITIVE)
+export const getStudentsByBranchAndSection = async (req, res) => {
+    const { branch, section } = req.params;
+
+    try {
+        // Use case-insensitive regex for both branch and section
+        const students = await User.find({
+            Branch: { $regex: new RegExp(`^${branch}$`, 'i') },
+            Section: { $regex: new RegExp(`^${section}$`, 'i') }
+        });
+
+        if (!students.length) {
+            return res.status(404).json({ message: `No students found in the branch ${branch}, section ${section}` });
+        }
+
+        res.status(200).json(students);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error });
+    }
+};
+
 export default {
     signup,
     signin,
-    getUserProfile
+    getUserProfile,
+    getStudentsByBranch,
+    getStudentsByBranchAndSection,
 };
